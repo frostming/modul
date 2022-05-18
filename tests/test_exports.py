@@ -1,7 +1,7 @@
 import pytest
 
-from exports import exports
-from tests import example
+from modul import exports
+from tests import example, example_assign
 
 
 def test_exports():
@@ -13,6 +13,13 @@ def test_exports():
     assert example.a == 123
     assert example.b == 456
     assert example.__all__ == ["foo", "bar", "god", "a", "b"]
+
+
+def test_exports_assign():
+    assert example_assign.foo() == 42
+    assert example_assign.a == 123
+    assert example_assign.b == 456
+    assert example_assign.__all__ == ["a", "b", "foo"]
 
 
 def test_duplicate_export():

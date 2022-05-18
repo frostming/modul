@@ -1,2 +1,2 @@
-Everyone interacting in the exports project's codebases and issue trackers is expected to
+Everyone interacting in the modul project's codebases and issue trackers is expected to
 follow the [PSF Code of Conduct](https://www.python.org/psf/conduct/).

@@ -3,7 +3,7 @@ requires = ["pdm-pep517"]
 build-backend = "pdm.pep517.api"
 
 [project]
-name = "exports"
+name = "modul"
 description = "Control the exported members for your modules"
 authors = [
     {name = "Frost Ming", email = "mianghong@gmail.com"}
@@ -25,8 +25,8 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/frostming/exports"
-Homepage = "https://github.com/frostming/exports"
+Repository = "https://github.com/frostming/modul"
+Homepage = "https://github.com/frostming/modul"
 
 [tool.pdm]
 version = {use_scm = true}
@@ -65,12 +65,12 @@ exclude = '''
 '''
 
 [tool.towncrier]
-package = "exports"
+package = "modul"
 filename = "CHANGELOG.md"
-issue_format = "[#{issue}](https://github.com/frostming/exports/issues/{issue})"
+issue_format = "[#{issue}](https://github.com/frostming/modul/issues/{issue})"
 directory = "news/"
 start_string = "<!-- insertion marker -->"
-title_format = "[v{version}](https://github.com/frostming/exports/releases/tag/{version}) ({project_date})"
+title_format = "[v{version}](https://github.com/frostming/modul/releases/tag/{version}) ({project_date})"
 template = "news/towncrier_template.md"
 underlines = "-~^"
 
@@ -109,7 +109,7 @@ profile = "black"
 atomic = true
 skip_glob = ["*/setup.py"]
 filter_files = true
-known_first_party = ["exports"]
+known_first_party = ["modul"]
 
 [tool.pytest.ini_options]
 filterwarnings = [

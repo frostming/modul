@@ -10,8 +10,8 @@ Nothing easier!
 Fork and clone the repository:
 
 ```bash
-git clone https://github.com/frostming/exports
-cd exports
+git clone https://github.com/frostming/modul
+cd modul
 ```
 
 We use [pdm](https://pdm.fming.dev) to manage the project and dependencies, install PDM if it isn't done yet, then:
@@ -39,10 +39,10 @@ nox -s tests-3.8
 ```
 
 !!! important "TIPS"
-    `nox` and `pre-commit` in the following section are not list in the `dev-dependencies` of the project,
-    because they can be installed separately to the system and used via the external executable. If you are willing to
-    reproduce the development environment without external dependencies. Run `pdm add -d nox pre-commit` and the
-    corresponding commands should be prefixed with `pdm run` as well.
+`nox` and `pre-commit` in the following section are not list in the `dev-dependencies` of the project,
+because they can be installed separately to the system and used via the external executable. If you are willing to
+reproduce the development environment without external dependencies. Run `pdm add -d nox pre-commit` and the
+corresponding commands should be prefixed with `pdm run` as well.
 
 ## Development
 
@@ -59,6 +59,7 @@ If you updated the documentation or the project dependencies:
 **Before committing:**
 
 1. Make sure you submit a news entry under `news/` directory with the name pattern `<issue_or_pr_num>.<type>.md` where `<type>` should be one of:
+
    1. `bugfix` for bug fixes
    1. `feature` for features and improvements
    1. `doc` for documentation improvements

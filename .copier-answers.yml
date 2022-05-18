@@ -10,9 +10,9 @@ copyright_holder: Frost Ming
 copyright_holder_email: mianghong@gmail.com
 copyright_license: MIT
 project_description: Control the exported members for your modules
-project_name: exports
-python_package_distribution_name: exports
-python_package_import_name: exports
+project_name: modul
+python_package_distribution_name: modul
+python_package_import_name: modul
 python_package_requires_python: '>=3.7'
-repository_name: exports
+repository_name: modul
 repository_namespace: frostming

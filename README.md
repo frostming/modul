@@ -1,7 +1,7 @@
-# exports
+# Modul
 
-[![Tests](https://github.com/frostming/exports/workflows/Tests/badge.svg)](https://github.com/frostming/exports/actions?query=workflow%3Aci)
-[![pypi version](https://img.shields.io/pypi/v/exports.svg)](https://pypi.org/project/exports/)
+[![Tests](https://github.com/frostming/modul/workflows/Tests/badge.svg)](https://github.com/frostming/modul/actions?query=workflow%3Aci)
+[![pypi version](https://img.shields.io/pypi/v/modul.svg)](https://pypi.org/project/modul/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
 
@@ -9,12 +9,12 @@ Control the exported members for your modules
 
 ## Requirements
 
-exports requires Python >=3.7
+Modul requires Python >=3.7
 
 ## Installation
 
 ```bash
-$ python -m pip install exports
+$ python -m pip install modul
 ```
 
 ## Quick start
@@ -23,7 +23,7 @@ Write a module exporting limited members:
 
 ```python
 # mymodule.py
-from exports import exports
+from modul import exports
 
 
 @exports
@@ -100,3 +100,17 @@ AttributeError: Module test has no attribute baz
        exports.bar = 42
    export_bar()
    ```
+
+6. Alternatively, you can assign members to the `exports` attribute of the module:
+
+   ```python
+   import modul
+
+   modul.exports = {
+       "bar": 42,
+       "baz": "hello"
+   }
+   ```
+
+   Note that you can't use `exports = <variable>` in this case, because it will lose the reference to the API.
+   And each assignment will overwrite the previous one so there can be only one assignment in your module.

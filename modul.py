@@ -17,15 +17,19 @@ class Exports:
 
     _namespaces: dict[types.ModuleType, dict[str, Any]] = {}
 
-    def get_current_module(self) -> types.ModuleType:
+    def get_current_module(self, stacklevel: int = 0) -> types.ModuleType:
         stack = inspect.stack()
         # stack[0] is this function, stack[1] is the caller export_var
         # stack[2] is the caller of export_var, stack[3] is the target module
-        module = inspect.getmodule(stack[3][0])
+        module = inspect.getmodule(stack[3 + stacklevel][0])
         return module
 
-    def export_var(self, name: str, value: Any) -> None:
-        module = self.get_current_module()
+    def clear_namespace(self, stacklevel: int = 0) -> None:
+        module = self.get_current_module(stacklevel)
+        self._namespaces.pop(module, None)
+
+    def export_var(self, name: str, value: Any, stacklevel: int = 0) -> None:
+        module = self.get_current_module(stacklevel)
         namespace = self._namespaces.setdefault(module, {})
         if name in namespace:
             raise DuplicateExportName(f"{name} has already been exported")
@@ -35,25 +39,36 @@ class Exports:
         self._replace_module(module)
 
     @overload
-    def __call__(self, to_export: _Decorated) -> _Decorated:
+    def __call__(
+        self, to_export: _Decorated, clear: bool = ..., stacklevel: int = ...
+    ) -> _Decorated:
         ...
 
     @overload
-    def __call__(self, to_export: Mapping[str, Any]) -> None:
+    def __call__(
+        self, to_export: Mapping[str, Any], clear: bool = ..., stacklevel: int = ...
+    ) -> None:
         ...
 
-    def __call__(self, to_export: _Decorated | Mapping[str, Any]) -> Any:
+    def __call__(
+        self,
+        to_export: _Decorated | Mapping[str, Any],
+        clear: bool = False,
+        stacklevel: int = 0,
+    ) -> Any:
+        if clear:
+            self.clear_namespace(stacklevel)
         if isinstance(to_export, Mapping):
             for name, value in to_export.items():
                 if not isinstance(name, str):
                     raise TypeError(f"Exported name {name} must be a string")
-                self.export_var(name, value)
+                self.export_var(name, value, stacklevel)
             return None
         if not hasattr(to_export, "__name__"):
             raise TypeError(
                 "The exported object must be a mapping or have __name__ attribute"
             )
-        self.export_var(to_export.__name__, to_export)
+        self.export_var(to_export.__name__, to_export, stacklevel)
         return to_export
 
     def __setattr__(self, name: str, value: Any) -> None:
@@ -87,6 +102,18 @@ class Exports:
 
 
 exports = Exports()
-del Exports
 
-__all__ = ["exports"]
+
+class _ModuleExports(types.ModuleType):
+    __file__ = __file__
+    __all__ = ["exports"]
+    exports = exports
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name != "exports":
+            super().__setattr__(name, value)
+        self.exports(value, clear=True, stacklevel=1)
+
+
+sys.modules[__name__] = _ModuleExports(__name__, __doc__)
+del Exports

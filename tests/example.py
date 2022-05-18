@@ -1,4 +1,4 @@
-from exports import exports
+from modul import exports
 
 
 @exports
