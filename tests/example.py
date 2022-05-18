@@ -10,5 +10,5 @@ baz = "unexported"
 bar = "hello"
 
 exports.bar = bar
-
+exports["god"] = "blessed"
 exports({"a": 123, "b": 456})

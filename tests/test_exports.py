@@ -9,9 +9,10 @@ def test_exports():
     with pytest.raises(AttributeError):
         example.baz
     assert example.bar == "hello"
+    assert example.god == "blessed"
     assert example.a == 123
     assert example.b == 456
-    assert example.__all__ == ["foo", "bar", "a", "b"]
+    assert example.__all__ == ["foo", "bar", "god", "a", "b"]
 
 
 def test_duplicate_export():
