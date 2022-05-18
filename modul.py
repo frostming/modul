@@ -159,6 +159,7 @@ class _ExportRegistry:
     def __set__(self, instance: Any, value: Any) -> None:
         module = self.get_current_module()
         namespace = self.namespaces.setdefault(module, {})
+        namespace.clear()
         Exports(namespace)(value)
 
 
