@@ -29,6 +29,13 @@ def test_duplicate_export():
         exports.test_foo = 2
 
 
+def test_exports_assignment_type_error():
+    import modul
+
+    with pytest.raises(TypeError):
+        modul.exports = 123
+
+
 class Foo:
     pass
 

@@ -98,8 +98,36 @@ class SequenceProxy(Sequence[str]):
     def __repr__(self) -> str:
         return f"SequenceProxy({list(self.data)!r})"
 
-    def __eq__(self, __o: object) -> bool:
-        return list(self) == __o
+    def __eq__(self, other: Any) -> bool:
+        return list(self) == other
+
+
+class _ExportedModule(types.ModuleType):
+    __exported__ = True
+
+    def __init__(
+        self,
+        name: str,
+        doc: str | None = None,
+        file: str | None = None,
+        *,
+        namespace: dict[str, Any] = None,
+    ) -> None:
+        super().__init__(name, doc)
+        self.__file__ = file
+        if namespace is None:
+            namespace = {}
+        self.__all__ = SequenceProxy(namespace)
+        self.__namespace__ = namespace
+
+    def __getattr__(self, name: str) -> Any:
+        try:
+            return self.__namespace__[name]
+        except KeyError:
+            raise AttributeError(f"Module {self.__name__!r} has no attribute {name!r}")
+
+    def __dir__(self) -> Iterable[str]:
+        return super().__dir__() + sorted(self.__namespace__)
 
 
 class _ExportRegistry:
@@ -122,29 +150,12 @@ class _ExportRegistry:
             return module
 
         namespace = self.namespaces.pop(module, {})
-
-        class _ExportedModule(types.ModuleType):
-            __file__ = getattr(module, "__file__", None)
-            __exported__ = True
-            __all__ = SequenceProxy(namespace)
-
-            def __getattr__(self, name: str) -> Any:
-                if not namespace:
-                    # If the module doesn't export any members, it will act like before.
-                    return getattr(module, name)
-                try:
-                    return namespace[name]
-                except KeyError:
-                    raise AttributeError(
-                        f"Module {module.__name__!r} has no attribute {name!r}"
-                    ) from None
-
-            def __dir__(self) -> Iterable[str]:
-                if not namespace:
-                    return dir(module)
-                return sorted(namespace) + super().__dir__()
-
-        newmodule = _ExportedModule(module.__name__, getattr(module, "__doc__", None))
+        newmodule = _ExportedModule(
+            module.__name__,
+            getattr(module, "__doc__", None),
+            getattr(module, "__file__", None),
+            namespace=namespace,
+        )
         sys.modules[module.__name__] = newmodule
         self.namespaces[newmodule] = namespace
         return newmodule
@@ -160,7 +171,9 @@ class _ExportRegistry:
         module = self.get_current_module()
         namespace = self.namespaces.setdefault(module, {})
         namespace.clear()
-        Exports(namespace)(value)
+        if not isinstance(value, Mapping):
+            raise TypeError("The value in the right hand must be a mapping")
+        namespace.update(value)
 
 
 class _ModuleExports(types.ModuleType):

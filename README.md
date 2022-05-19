@@ -17,6 +17,8 @@ Modul requires Python >=3.7
 $ python -m pip install modul
 ```
 
+Modul is a single-file module with less than 200 lines of code and no dependencies. It can be easily copied into your project.
+
 ## Quick start
 
 Write a module exporting limited members:
@@ -78,6 +80,12 @@ AttributeError: Module test has no attribute baz
 
    ```python
    exports["bar"] = 42
+   ```
+
+   Besides, the `exports` object supports all APIs of `dict`:
+
+   ```python
+   exports.update({"bar": 42})
    ```
 
 4. Export a map of (name, value) pairs:
