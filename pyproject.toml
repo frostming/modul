@@ -30,6 +30,8 @@ Homepage = "https://github.com/frostming/modul"
 
 [tool.pdm]
 version = {use_scm = true}
+includes = ["modul.py"]
+source-includes = ["noxfile.py"]
 
 [tool.pdm.dev-dependencies]
 test = [
