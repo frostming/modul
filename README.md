@@ -1,5 +1,7 @@
 # Modul
 
+`/moˈduːl/`
+
 [![Tests](https://github.com/frostming/modul/workflows/Tests/badge.svg)](https://github.com/frostming/modul/actions?query=workflow%3Aci)
 [![pypi version](https://img.shields.io/pypi/v/modul.svg)](https://pypi.org/project/modul/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
