@@ -1,6 +1,5 @@
 import pytest
 
-from modul import exports
 from tests import example, example_assign
 
 
@@ -23,9 +22,18 @@ def test_exports_assign():
 
 
 def test_duplicate_export():
+    from modul import exports
+
     exports.test_foo = 1
     with pytest.raises(ValueError, match="test_foo has already been exported"):
         exports.test_foo = 2
+
+
+def test_exports_assignment_type_error():
+    import modul
+
+    with pytest.raises(TypeError):
+        modul.exports = 123
 
 
 class Foo:
@@ -34,5 +42,20 @@ class Foo:
 
 @pytest.mark.parametrize("value", (1, "hello", Foo(), {1: "hello"}))
 def test_illegal_export_argument(value):
+    from modul import exports
+
     with pytest.raises(TypeError):
         exports(value)
+
+
+def test_dict_like_interface():
+    from modul import exports
+
+    exports.clear()
+    assert len(exports) == 0
+    exports["foo"] = 1
+    exports.update({"a": 123, "b": 456})
+    assert list(exports) == ["foo", "a", "b"]
+    assert dict(exports) == {"foo": 1, "a": 123, "b": 456}
+    assert exports.pop("foo") == 1
+    assert "foo" not in exports

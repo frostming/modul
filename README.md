@@ -1,5 +1,7 @@
 # Modul
 
+`/moˈduːl/`
+
 [![Tests](https://github.com/frostming/modul/workflows/Tests/badge.svg)](https://github.com/frostming/modul/actions?query=workflow%3Aci)
 [![pypi version](https://img.shields.io/pypi/v/modul.svg)](https://pypi.org/project/modul/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -16,6 +18,8 @@ Modul requires Python >=3.7
 ```bash
 $ python -m pip install modul
 ```
+
+Modul is a single-file module with less than 200 lines of code and no dependencies. It can be easily copied into your project.
 
 ## Quick start
 
@@ -78,6 +82,12 @@ AttributeError: Module test has no attribute baz
 
    ```python
    exports["bar"] = 42
+   ```
+
+   Besides, the `exports` object supports all APIs of `dict`:
+
+   ```python
+   exports.update({"bar": 42})
    ```
 
 4. Export a map of (name, value) pairs:
